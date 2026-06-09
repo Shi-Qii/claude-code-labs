@@ -55,6 +55,16 @@ PostToolUse  → 工具執行「之後」觸發
 
 `matcher` 是工具名稱，常用的有：`Write`、`Edit`、`Bash`、`Read`。
 
+**取得工具資訊：** Hook 執行時，Claude 會把工具的輸入/輸出以 JSON 格式傳給 stdin。用 `jq` 解析：
+
+```bash
+# Edit/Write → 取得檔案路徑
+jq -r '.tool_input.file_path'
+
+# Bash → 取得執行的指令
+jq -r '.tool_input.command'
+```
+
 ---
 
 ## 練習
@@ -62,6 +72,8 @@ PostToolUse  → 工具執行「之後」觸發
 在你的專案建立 `.claude/settings.json`，設定一個 PostToolUse hook：
 
 **任務：每次 Claude 編輯檔案後，自動印出「已修改：[檔案路徑]」**
+
+Hook 的指令會從 stdin 收到一個 JSON，用 `jq` 解析出你要的欄位：
 
 ```json
 {
@@ -72,7 +84,7 @@ PostToolUse  → 工具執行「之後」觸發
         "hooks": [
           {
             "type": "command",
-            "command": "echo '已修改：' $CLAUDE_TOOL_INPUT_FILE_PATH"
+            "command": "jq -r '\"已修改：\" + .tool_input.file_path'"
           }
         ]
       }
@@ -107,7 +119,7 @@ PostToolUse  → 工具執行「之後」觸發
   "hooks": [
     {
       "type": "command",
-      "command": "echo \"[$(date)] $CLAUDE_TOOL_INPUT_COMMAND\" >> ~/.claude/bash_history.log"
+      "command": "jq -r '.tool_input.command' >> ~/.claude/bash_history.log"
     }
   ]
 }
