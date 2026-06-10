@@ -50,7 +50,23 @@ MCP Server 是在你電腦本機執行的程式。Claude 發出請求，MCP Serv
 
 ## 知識點：設定方式
 
-MCP Server 設定在 `settings.json`：
+Claude Code 用 `claude mcp add` 指令管理 MCP Server。
+
+**方法一：指令新增（推薦）**
+```bash
+# 新增 stdio 類型的 MCP Server
+claude mcp add 伺服器名稱 -- 執行指令 [參數...]
+
+# 查看已安裝的清單
+claude mcp list
+
+# 移除
+claude mcp remove 伺服器名稱
+```
+
+**方法二：.mcp.json（適合團隊共用）**
+
+在專案根目錄建立 `.mcp.json`，可以 commit 進 repo 讓團隊共用：
 
 ```json
 {
@@ -66,13 +82,11 @@ MCP Server 設定在 `settings.json`：
 }
 ```
 
-兩個位置：
-```
-~/.claude/settings.json           ← 全域：所有專案都能用這個工具
-你的專案/.claude/settings.json    ← 專案：只有這個專案能用
-```
+**驗證安裝成功**
 
-設定完後**需要重啟 Claude Code** 才會載入。
+在 Claude Code 輸入 `/mcp`，可以看到所有連線中的 MCP Server 狀態，比問 Claude「你有哪些工具」更直接準確。
+
+> ⚠️ 注意：`settings.json` 裡的 `mcpServers` 是 **Claude Desktop** 的設定格式，不適用於 Claude Code。兩者使用相同的 server 程式，但管理方式不同。
 
 ---
 
@@ -80,15 +94,8 @@ MCP Server 設定在 `settings.json`：
 
 ### Fetch — 抓取網頁內容
 
-```json
-{
-  "mcpServers": {
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"]
-    }
-  }
-}
+```bash
+claude mcp add fetch -- uvx mcp-server-fetch
 ```
 
 **用途：** 讓 Claude 直接抓取任何網頁或 API 的內容
@@ -100,22 +107,16 @@ MCP Server 設定在 `settings.json`：
 告訴我最新版的 VS Code 版本號和發布日期
 ```
 
+> 需要先安裝 `uv`：`brew install uv`
+
 ---
 
 ### GitHub — 操作 GitHub
 
-```json
-{
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "你的 GitHub Token"
-      }
-    }
-  }
-}
+GitHub 官方 MCP Server 使用 remote 連線方式：
+
+```bash
+claude mcp add --transport http github https://api.githubcopilot.com/mcp/
 ```
 
 **如何取得 token：**
@@ -133,71 +134,11 @@ GitHub → Settings → Developer settings → Personal access tokens → Fine-g
 
 ### Filesystem — 讀寫指定目錄
 
-```json
-{
-  "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/你的名字/Documents"
-      ]
-    }
-  }
-}
+```bash
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /Users/你的名字/Documents
 ```
 
 **用途：** 讓 Claude 存取 Claude Code 預設範圍以外的目錄（例如你的文件資料夾）
-
----
-
-### PostgreSQL — 查詢資料庫
-
-```json
-{
-  "mcpServers": {
-    "postgres": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://帳號:密碼@localhost/資料庫名稱"
-      ]
-    }
-  }
-}
-```
-
-**用途：** 讓 Claude 直接查詢你的資料庫，分析資料、檢查欄位、除錯
-
-使用範例：
-```
-查看 users table 的 schema，
-然後告訴我有沒有缺少 index 的外鍵欄位
-```
-
----
-
-### Brave Search — 網路搜尋
-
-```json
-{
-  "mcpServers": {
-    "brave-search": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-      "env": {
-        "BRAVE_API_KEY": "你的 Brave API Key"
-      }
-    }
-  }
-}
-```
-
-**如何取得 API key：** https://brave.com/search/api/ （有免費方案）
-
-**用途：** 讓 Claude 搜尋即時的網路資訊，突破訓練資料的時間限制
 
 ---
 
@@ -208,13 +149,11 @@ GitHub → Settings → Developer settings → Personal access tokens → Fine-g
    → 官方列表：https://github.com/modelcontextprotocol/servers
    → 或搜尋：「[服務名稱] MCP server」
 
-2. 在 settings.json 加入設定
+2. 用 claude mcp add 安裝
 
-3. 重啟 Claude Code
+3. 在 Claude Code 輸入 /mcp 確認連線狀態
 
-4. 確認 MCP Server 有啟動
-   → 在 Claude Code 裡問：「你現在有哪些工具可以用？」
-   → 或直接叫它用那個工具做一件事
+4. 實際測試：叫 Claude 用那個工具做一件事
 ```
 
 ---
@@ -234,20 +173,17 @@ MCP Server 會用你的帳號和權限去呼叫外部服務。使用時注意：
 
 ### 步驟 1：安裝 Fetch MCP（不需要 token）
 
-更新 `~/.claude/settings.json`：
-
-```json
-{
-  "mcpServers": {
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"]
-    }
-  }
-}
+先確認 `uv` 已安裝：
+```bash
+brew install uv
 ```
 
-重啟 Claude Code。
+然後新增 MCP Server：
+```bash
+claude mcp add fetch -- uvx mcp-server-fetch
+```
+
+在 Claude Code 輸入 `/mcp` 確認 fetch 出現在連線清單。
 
 ### 步驟 2：驗證它有在運作
 
@@ -279,7 +215,7 @@ MCP Server 會用你的帳號和權限去呼叫外部服務。使用時注意：
 可以，在 `mcpServers` 物件裡加多個 key 即可。
 
 **Q：有 Claude Desktop 版的 MCP Server 可以用在 Claude Code 嗎？**
-可以，設定格式完全相同。
+Server 本身通用，但設定方式不同。Claude Desktop 是在 `claude_desktop_config.json` 裡設定，Claude Code 是用 `claude mcp add` 指令或 `.mcp.json`。把 Desktop 的設定直接貼進 Claude Code 的 settings.json 不會生效。
 
 ---
 

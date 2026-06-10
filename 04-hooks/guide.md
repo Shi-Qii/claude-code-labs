@@ -34,13 +34,18 @@ Claude 執行 Edit（修改檔案）
 Claude 繼續對話
 ```
 
-### 四種觸發時機
+### Hook 觸發時機
 
 ```
-PreToolUse    → 工具執行之前
-PostToolUse   → 工具執行之後
-PreCompact    → 對話記憶壓縮之前
-PostCompact   → 對話記憶壓縮之後（常用於重新載入狀態）
+PreToolUse       → 工具執行之前
+PostToolUse      → 工具執行之後
+UserPromptSubmit → 你送出訊息時
+Notification     → Claude 發出通知時
+Stop             → Claude 完成回應時
+SubagentStop     → Sub-agent 完成時
+PreCompact       → 對話記憶壓縮之前
+SessionStart     → 對話開始時
+SessionEnd       → 對話結束時
 ```
 
 ### Hook 能做什麼
@@ -243,7 +248,8 @@ jq -r '.tool_input.file_path' | xargs -I{} echo "修改了：{}"
 
 - Hook 的 stdout 會顯示在 Claude Code 的輸出裡
 - Hook 失敗（exit code 非 0）預設**不會**中斷 Claude 的操作
-- 如果你想讓 hook 失敗時中斷操作，需要在 hook 設定裡加 `"blocking": true`
+- 如果你想讓 **PreToolUse** hook 阻止工具執行，讓 hook 以 **exit code 2** 結束，Claude 會收到 stderr 的內容並停止執行該工具
+- 也可以讓 hook 輸出 JSON `{"decision": "block", "reason": "說明原因"}` 達到相同效果
 
 ---
 

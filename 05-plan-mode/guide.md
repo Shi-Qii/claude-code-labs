@@ -47,12 +47,12 @@ Claude：「了解，我調整計畫...」
 先列出計畫，等我確認再執行
 ```
 
-**方法二：輸入 `/plan`**
-在對話框輸入 `/plan`，Claude 就會進入只規劃不執行的模式。
+**方法二：按 Shift+Tab 切換模式**
+在 Claude Code 對話框裡按 `Shift+Tab`，可以在一般模式和 Plan Mode 之間切換。畫面上會顯示目前的模式。
 
-**方法三：用 `--plan` flag 啟動**
+**方法三：啟動時指定**
 ```bash
-claude --plan
+claude --permission-mode plan
 ```
 
 ### 讓計畫更有用：怎麼問出好計畫

@@ -180,8 +180,8 @@ async function runAgent(userMessage) {
     // 把 Claude 的回應加入對話歷史
     messages.push({ role: "assistant", content: response.content });
 
-    // 如果沒有 tool call，結束
-    if (response.stop_reason === "end_turn") {
+    // 只在 stop_reason === "tool_use" 時繼續處理工具，其他情況（end_turn、max_tokens 等）一律結束
+    if (response.stop_reason !== "tool_use") {
       const textBlock = response.content.find((b) => b.type === "text");
       return textBlock?.text ?? "";
     }
@@ -278,7 +278,8 @@ async function chat(history, userMessage) {
 
     history.push({ role: "assistant", content: response.content });
 
-    if (response.stop_reason === "end_turn") {
+    // 只在 tool_use 時繼續迴圈，避免 max_tokens 等情況造成無限循環
+    if (response.stop_reason !== "tool_use") {
       const text = response.content.find((b) => b.type === "text")?.text ?? "";
       return { text, history };
     }

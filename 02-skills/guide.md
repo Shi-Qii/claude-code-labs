@@ -1,12 +1,13 @@
-# 02 — Skills：自訂你的 slash 指令
+# 02 — 自訂 Slash Commands 與 Skills
 
 ## 你會學到什麼
 
-- Skills 的檔案結構和命名規則
-- 如何寫出有效的 skill 內容
-- 傳入參數給 skill
-- 讓 skill 讀檔、執行指令、組合多個動作
-- 全域 skill vs 專案 skill
+- 自訂 slash commands 的檔案結構和命名規則
+- 如何寫出有效的指令內容
+- 傳入參數給指令
+- 讓指令讀檔、執行指令、組合多個動作
+- 全域指令 vs 專案指令
+- Skills（SKILL.md）與 slash commands 的差異
 
 預估時間：20 分鐘
 
@@ -14,9 +15,9 @@
 
 ## 核心概念
 
-### Skills 是什麼
+### 自訂 Slash Commands 是什麼
 
-Skills 是你自訂的 slash 指令，放在 `.claude/commands/` 資料夾，每個 `.md` 檔就是一個指令。
+自訂 slash commands 放在 `.claude/commands/` 資料夾，每個 `.md` 檔就是一個指令，**需要你手動輸入才會觸發**。
 
 ```
 .claude/commands/review.md       →   /review
@@ -27,14 +28,14 @@ Skills 是你自訂的 slash 指令，放在 `.claude/commands/` 資料夾，每
 **指令名稱 = 檔案名稱（不含 .md）**
 **指令內容 = 檔案裡的文字（就是你告訴 Claude 要做什麼）**
 
-### 兩種 skill 位置
+### 兩種位置
 
 ```
 ~/.claude/commands/           ← 全域：在任何專案都能用
 你的專案/.claude/commands/    ← 專案：只在這個專案有效
 ```
 
-同名時，專案層級的 skill 優先。
+同名時，專案層級優先。
 
 ---
 
@@ -227,6 +228,39 @@ mkdir -p .claude/commands
 
 ---
 
+---
+
+## 進階：Skills（SKILL.md）
+
+除了手動觸發的 slash commands，Claude Code 還有另一種機制叫 **Skills**。
+
+**差異：**
+
+| | 自訂 Slash Commands | Skills |
+|---|---|---|
+| 位置 | `.claude/commands/*.md` | `.claude/skills/<名稱>/SKILL.md` |
+| 觸發方式 | 你輸入 `/指令名稱` | Claude 判斷任務相關時自動取用 |
+| 適合 | 固定流程、需要刻意執行的工作 | 背景知識、Claude 需要主動參考的規範 |
+
+**SKILL.md 格式：**
+
+```markdown
+---
+name: code-review-rules
+description: 程式碼審查的評分標準，在進行 code review 時參考
+---
+
+審查時重點關注：
+1. 沒有 hardcode 的密碼或 API key
+2. 所有公開函式都有明確的輸入驗證
+3. 錯誤要被捕捉並記錄，不能靜默失敗
+```
+
+建立後，當你叫 Claude 做 code review，它會自動找到這個 skill 並參考裡面的標準，不需要你每次提醒。
+
+---
+
 ## 完成條件
 
-成功建立並執行至少一個自訂 slash 指令，且它確實做了你希望它做的事。
+- 成功建立並執行至少一個自訂 slash 指令，且它確實做了你希望它做的事
+- 能說清楚：slash commands 和 Skills 分別適合用在什麼情況
