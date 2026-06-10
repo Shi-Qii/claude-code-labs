@@ -59,15 +59,15 @@ Shift+Tab 循環模式：
 {
   "permissions": {
     "deny": [
-      "Bash(rm -rf:)",
-      "Bash(git push --force:)",
-      "Bash(kubectl delete:)"
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(kubectl delete:*)"
     ]
   }
 }
 ```
 
-**注意：** deny 規則是字面前綴比對（`:` 後接任意內容），能擋住常見寫法，但擋不住所有變體。定位是降低風險，不是保證安全。
+**注意：** deny 規則是字面前綴比對（`:*` 表示比對該前綴開頭的任意指令），能擋住常見寫法，但擋不住所有變體。定位是降低風險，不是保證安全。
 
 **原則：** 寧可保守多擋，之後有需要再開，比出了問題再補救容易。
 

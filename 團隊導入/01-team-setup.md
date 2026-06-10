@@ -70,9 +70,9 @@ commit `.mcp.json` 後，其他人 clone 就能直接用。
 {
   "permissions": {
     "deny": [
-      "Bash(rm -rf:)",
-      "Bash(git push --force:)",
-      "Bash(kubectl delete:)"
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(kubectl delete:*)"
     ]
   }
 }
