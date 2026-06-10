@@ -21,9 +21,10 @@
 
 | 檔案/資料夾 | 原因 |
 |-------------|------|
-| `~/.claude/` | 個人全域設定，不應該影響其他人 |
 | `.claude/settings.local.json` | 個人偏好覆蓋，每個人不同 |
 | `.env`、任何含 API key 的檔案 | secrets 絕對不進 repo |
+
+`~/.claude/` 是每個人 home 目錄下的個人全域設定，本來就不在 repo 內，不需要特別處理。
 
 **建議在 `.gitignore` 加：**
 
@@ -37,12 +38,7 @@
 
 ### Step 1：建立 CLAUDE.md
 
-```bash
-# 讓 Claude 幫你產生初稿
-/init
-```
-
-`/init` 會掃描專案結構，自動產生 `CLAUDE.md` 草稿，再依團隊規範補充即可。
+在 claude 對話框輸入 `/init`，Claude 會掃描專案結構，自動產生 `CLAUDE.md` 草稿，再依團隊規範補充即可。
 
 ### Step 2：建立共用 slash commands
 
@@ -59,8 +55,8 @@
 ### Step 3：設定 MCP（如有需要）
 
 ```bash
-# 加入 MCP server，自動寫入 .mcp.json
-claude mcp add --scope project <name> <config>
+# 加入 MCP server，自動寫入 .mcp.json（以 GitHub 為例）
+claude mcp add --scope project --transport http github https://api.githubcopilot.com/mcp/
 ```
 
 commit `.mcp.json` 後，其他人 clone 就能直接用。  
@@ -74,14 +70,15 @@ commit `.mcp.json` 後，其他人 clone 就能直接用。
 {
   "permissions": {
     "deny": [
-      "Bash(rm -rf *)",
-      "Bash(git push --force)"
+      "Bash(rm -rf:)",
+      "Bash(git push --force:)",
+      "Bash(kubectl delete:)"
     ]
   }
 }
 ```
 
-禁止危險指令，等團隊熟悉後再鬆綁。
+deny 規則是字面前綴比對，能擋住常見寫法，但擋不住所有變體。等團隊熟悉後再視需要調整。
 
 ---
 

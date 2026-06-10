@@ -102,7 +102,7 @@ claude
 可以，用 05 Plan Mode 讓它先分析再給建議，比直接叫它改更可控。
 
 **Q：要擔心把公司 code 傳給 Anthropic 嗎？**  
-詳見[04-security.md](./04-security.md)。簡短版：預設訊息用於訓練，可以在設定關閉；敏感系統建議先讀資安規範。
+詳見[04-security.md](./04-security.md)。簡短版：API / Team / Enterprise 方案的對話預設不用於模型訓練；Pro / Max 個人帳號可在 claude.ai 隱私設定自行選擇。敏感系統建議導入前先確認帳號類型和公司資安規範。
 
 **Q：免費版夠用嗎？**  
 基礎篇 01-07 用 Claude Pro 訂閱就夠，不額外計費。進階 API 呼叫另計。

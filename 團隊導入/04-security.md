@@ -59,15 +59,15 @@ Shift+Tab 循環模式：
 {
   "permissions": {
     "deny": [
-      "Bash(rm -rf *)",
-      "Bash(git push --force)",
-      "Bash(git push --force-with-lease)",
-      "Bash(DROP TABLE*)",
-      "Bash(kubectl delete *)"
+      "Bash(rm -rf:)",
+      "Bash(git push --force:)",
+      "Bash(kubectl delete:)"
     ]
   }
 }
 ```
+
+**注意：** deny 規則是字面前綴比對（`:` 後接任意內容），能擋住常見寫法，但擋不住所有變體。定位是降低風險，不是保證安全。
 
 **原則：** 寧可保守多擋，之後有需要再開，比出了問題再補救容易。
 
@@ -91,13 +91,16 @@ Shift+Tab 循環模式：
 
 ## 對話資料與訓練
 
-預設情況下，Anthropic 可能使用對話內容改善模型。
+訓練用途的規則依帳號類型而定：
 
-如果你們有資料不外流的要求：
-1. 在 Claude Console 的 Enterprise 設定關閉訓練用途（需要 Team / Enterprise 方案）
-2. 或在 `~/.claude/settings.json` 查詢目前的隱私設定
+| 帳號類型 | 訓練用途預設值 |
+|----------|--------------|
+| API / Team / Enterprise | 對話資料預設**不用於**模型訓練 |
+| Pro / Max 個人帳號 | 可在 claude.ai 帳號隱私設定中自行選擇是否允許 |
 
-企業合規需求請洽 Anthropic 企業銷售，確認 BAA（Business Associate Agreement）或資料處理合約。
+企業合規需求（如 BAA、資料處理合約）請洽 Anthropic 企業銷售。
+
+> 訓練政策可能更新，請以 [Anthropic 官方隱私政策頁面](https://www.anthropic.com/privacy) 為準，本文不替代官方文件。
 
 ---
 
