@@ -38,7 +38,7 @@
 | [06](./06-computer-use.md) | 🖥️ Computer Use | 讓 Claude 看懂畫面並操作滑鼠鍵盤，自動完成 UI 任務 |
 | [07](./07-rag.md) | 📚 RAG + 知識庫 | 建立向量資料庫與文件檢索系統，讓 Claude 回答企業知識問題 |
 | [08](./08-evaluation.md) | 📊 Evaluation Pipeline | 自動比較 Prompt 效果、打分數、產生評測報告 |
-| [09](./09-prompt-optimization.md) | ✨ Prompt 進階優化 | 學會 Prompt Caching、Few-shot、Extended Thinking 等實戰技巧 |
+| [09](./09-prompt-optimization.md) | ✨ Prompt 進階優化 | 學會 Prompt Caching、Few-shot、Adaptive Thinking 等實戰技巧 |
 
 ---
 
@@ -95,19 +95,21 @@
 | 05 CI/CD 整合 | ★★★☆☆ | 45 min | 基礎篇 02 |
 | 06 Computer Use | ★★★★★ | 90 min | 進階 03、Docker |
 | 07 RAG + 知識庫 | ★★★★☆ | 75 min | 進階 03、Python |
-| 08 Evaluation Pipeline | ★★★☆☆ | 50 min | 進階 03 |
-| 09 Prompt 進階優化 | ★★☆☆☆ | 30 min | 進階 03 |
+| 08 Evaluation Pipeline | ★★★☆☆ | 50 min | 進階 03、Python |
+| 09 Prompt 進階優化 | ★★★☆☆ | 30 min | 進階 03、Python |
 
-> **難度說明：** ★★ 純技巧不寫碼 / ★★★ 少量程式碼 / ★★★★ 需要寫程式碼 / ★★★★★ 架構複雜或環境設定難
+> **難度說明：** ★★★ 少量程式碼 / ★★★★ 需要寫程式碼 / ★★★★★ 架構複雜或環境設定難
 
 ---
 
 ## 🔧 需要準備什麼
 
+進階篇 03 之後需要 Anthropic API key，費用與訂閱方案分開計費。**全部做完約數美元等級**，依模型選擇和測試次數而異。
+
 | 工具 | 需要的單元 | 安裝方式 |
 |------|-----------|---------|
-| Anthropic API key | 03、04、06、07、08 | [console.anthropic.com](https://console.anthropic.com) |
+| Anthropic API key | 03、04、05、06、07、08、09 | [console.anthropic.com](https://console.anthropic.com) |
 | Node.js | 02、03 | `brew install node` |
-| Python | 07（推薦） | `brew install python` |
+| Python | 07、08、09 | `brew install python` |
 | Docker | 06 | [docker.com](https://www.docker.com) |
 | jq | 01 | `brew install jq`（基礎篇 04 應已安裝）|
